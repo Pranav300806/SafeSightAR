@@ -21,19 +21,19 @@ Integrated into this repository is **SmartSpace AR**, an interior furniture layo
 
 ### 1. Relational Risk Intelligence (SafeSight)
 Unlike traditional computer vision that flags individual objects in isolation, the Risk Engine evaluates pairwise spatial proximity:
-* ** Spill Risk:** Liquid container placed within critical proximity ($\Delta d \le 0.35\text{ m}$) of electronic equipment (laptop, keyboard).
-* ** Fall / Cut Risk:** Sharp tools (knives) placed near perimeter edges ($\le 0.12\text{ m}$) of tables or desks.
-* ** Trip Hazard:** Protruding open drawers ($\gt 0.40\text{ m}$) or cables crossing floor walkway vectors.
+* Spill Risk: Liquid container placed within critical proximity ($\Delta d \le 0.35\text{ m}$) of electronic equipment (laptop, keyboard).
+* Fall / Cut Risk: Sharp tools (knives) placed near perimeter edges ($\le 0.12\text{ m}$) of tables or desks.
+* Trip Hazard: Protruding open drawers ($\gt 0.40\text{ m}$) or cables crossing floor walkway vectors.
 
 ### 2. Dynamic Furniture & Replacement System (SmartSpace)
-* **Mobile AR Placement:** Real-world surface plane tracking and reticle-based tap-to-place workflows powered by AR Foundation.
-* **Dynamic Furniture Swapping:** Replace existing placed items directly from the catalog while preserving world coordinates, orientation, and scaling baselines.
-* **Responsive Control HUD:** Contextual action bar providing quick controls for Rotate (45°), Scale, Replace, and Delete.
+* Mobile AR Placement: Real-world surface plane tracking and reticle-based tap-to-place workflows powered by AR Foundation.
+* Dynamic Furniture Swapping: Replace existing placed items directly from the catalog while preserving world coordinates, orientation, and scaling baselines.
+* Responsive Control HUD: Contextual action bar providing quick controls for Rotate (45°), Scale, Replace, and Delete.
 
 ### 3. In-Editor "Anti-Gravity" Simulation Rig
-* **Hardware-Free Testing:** Run tests directly in the Unity Game view without deploying to an Android device.
-* **Zero-G Physics Dynamics:** Objects float with spring-damped levitation physics (`Rigidbody.useGravity = false`) to test spatial clearance without dropping through ground planes.
-* **Desktop Controls:** Left-click drag to reposition; mouse scroll-wheel to push/pull depth along the camera ray.
+* Hardware-Free Testing: Run tests directly in the Unity Game view without deploying to an Android device.
+* Zero-G Physics Dynamics: Objects float with spring-damped levitation physics (`Rigidbody.useGravity = false`) to test spatial clearance without dropping through ground planes.
+* Desktop Controls: Left-click drag to reposition; mouse scroll-wheel to push/pull depth along the camera ray.
 
 ---
 
