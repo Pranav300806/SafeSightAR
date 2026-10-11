@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SafeSight AR - Mobile AR Furniture & Spatial Simulation</title>
+  <link rel="stylesheet" href="index.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <style>
+    /* Mobile AR Furniture Catalog Styles */
+    .catalog-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .catalog-item {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+    .catalog-item:hover {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: var(--neon-cyan);
+      transform: translateY(-2px);
+    }
+    .catalog-item.selected {
+      background: rgba(56, 189, 248, 0.25);
+      border-color: var(--neon-cyan);
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
+    }
+    .catalog-icon {
+      font-size: 24px;
+    }
+    .catalog-name {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+    .catalog-dim {
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+    .mode-switch-group {
+      display: flex;
+      gap: 6px;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 4px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+    }
+    .mode-tab {
+      flex: 1;
+      padding: 8px 10px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .mode-tab.active {
+      background: var(--neon-cyan);
+      color: #090d16;
+      font-weight: 700;
+    }
+    .ar-controls-bar {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 12px;
+      background: rgba(15, 23, 42, 0.88);
+      backdrop-filter: blur(12px);
+      padding: 10px 18px;
+      border-radius: 30px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      z-index: 20;
+    }
+    .ar-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+    .ar-btn:hover {
+      background: var(--neon-cyan);
+      color: #090d16;
+      border-color: var(--neon-cyan);
+    }
+    .ar-btn.danger:hover {
+      background: var(--neon-red);
+      color: #fff;
+      border-color: var(--neon-red);
+    }
+  </style>
+</head>
+<body>
+  <div id="app-container">
+    <!-- Header -->
+    <header>
+      <div class="brand">
+        <span class="brand-icon">🛋️</span>
+        <div class="brand-title">SafeSight AR · Mobile AR Furniture & Spatial Risk Rig</div>
+      </div>
+      <div id="system-status" class="system-status-badge">
+        <span class="status-dot">●</span> AR PLANE DETECTED · READY TO PLACE
+      </div>
+    </header>
+
+    <!-- Left Controls Sidebar -->
+    <aside class="sidebar-left">
+      <!-- Mode Switcher -->
+      <div class="mode-switch-group">
+        <button id="tab-mode-furniture" class="mode-tab active">📱 Mobile AR Furniture</button>
+        <button id="tab-mode-antigravity" class="mode-tab">🔬 Zero-G Hazard Lab</button>
+      </div>
+
+      <!-- Furniture Catalog Section -->
+      <div id="furniture-controls-section">
+        <div class="section-title">🛋️ 3D Furniture Catalog</div>
+        <div class="catalog-grid">
+          <div class="catalog-item selected" data-item="sofa">
+            <span class="catalog-icon">🛋️</span>
+            <span class="catalog-name">Nordic Sofa</span>
+            <span class="catalog-dim">1.8m × 0.8m</span>
+          </div>
+          <div class="catalog-item" data-item="chair">
+            <span class="catalog-icon">🪑</span>
+            <span class="catalog-name">Ergonomic Chair</span>
+            <span class="catalog-dim">0.6m × 0.9m</span>
+          </div>
+          <div class="catalog-item" data-item="desk">
+            <span class="catalog-icon">🪵</span>
+            <span class="catalog-name">Executive Desk</span>
+            <span class="catalog-dim">1.5m × 0.75m</span>
+          </div>
+          <div class="catalog-item" data-item="drawer">
+            <span class="catalog-icon">🗄️</span>
+            <span class="catalog-name">Modular Drawer</span>
+            <span class="catalog-dim">0.5m × 0.6m</span>
+          </div>
+          <div class="catalog-item" data-item="lamp">
+            <span class="catalog-icon">💡</span>
+            <span class="catalog-name">Arc Floor Lamp</span>
+            <span class="catalog-dim">0.4m × 1.6m</span>
+          </div>
+          <div class="catalog-item" data-item="coffee">
+            <span class="catalog-icon">☕</span>
+            <span class="catalog-name">Coffee Table</span>
+            <span class="catalog-dim">0.9m × 0.45m</span>
+          </div>
+        </div>
+
+        <div class="section-title" style="margin-top: 15px;">📐 AR Placement Settings</div>
+        <div class="control-slider-group">
+          <div class="slider-header">
+            <span>Orientation Rotation</span>
+            <span id="rotation-val">0°</span>
+          </div>
+          <input type="range" id="slider-rotation" min="0" max="360" value="0">
+        </div>
+
+        <div class="control-slider-group">
+          <div class="slider-header">
+            <span>Walkway Safety Clearance</span>
+            <span id="clearance-val">50 cm</span>
+          </div>
+          <input type="range" id="slider-clearance" min="20" max="100" value="50">
+        </div>
+
+        <div style="font-size: 11px; color: var(--text-muted); line-height: 1.4; padding: 10px; background: rgba(0,0,0,0.3); border-radius: 6px; margin-top: 10px;">
+          📱 <b>Mobile AR Touch Gestures:</b><br>
+          • <b>Tap on Floor:</b> Instantly places furniture at AR reticle<br>
+          • <b>1-Finger Drag:</b> Repositions item across floor plane<br>
+          • <b>Rotate / Twist:</b> Orients furniture around up-axis<br>
+          • <b>SafeSight Alert:</b> Turns red if obstructing doors/walkways
+        </div>
+      </div>
+
+      <!-- Zero-G Lab Presets (Hidden in furniture mode) -->
+      <div id="antigravity-controls-section" style="display: none;">
+        <div class="section-title">⚡ Hazard Presets</div>
+        <button id="btn-spill" class="preset-btn">
+          <span>[1] Liquid Spill Hazard</span>
+          <span class="btn-tag">Bottle ➔ Laptop</span>
+        </button>
+        <button id="btn-edge" class="preset-btn">
+          <span>[2] Table Edge Fall Risk</span>
+          <span class="btn-tag">Knife ➔ Edge</span>
+        </button>
+        <button id="btn-drawer" class="preset-btn">
+          <span>[3] Walkway Obstruction</span>
+          <span class="btn-tag">Open Drawer</span>
+        </button>
+        <button id="btn-cable" class="preset-btn">
+          <span>[4] Trailing Cable Trip</span>
+          <span class="btn-tag">Across Floor</span>
+        </button>
+        <button id="btn-reset" class="preset-btn" style="border-color: var(--neon-cyan); color: var(--neon-cyan);">
+          <span>[R] Safe Neutral Reset</span>
+          <span>↺</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Center 3D Simulation Viewport -->
+    <main class="simulation-viewport">
+      <canvas id="canvas-3d"></canvas>
+
+      <!-- Floating AR Action Bar -->
+      <div class="ar-controls-bar">
+        <button id="btn-ar-place" class="ar-btn">
+          <span>✨</span> Tap to Place Selected
+        </button>
+        <button id="btn-ar-rotate" class="ar-btn">
+          <span>🔄</span> Rotate +45°
+        </button>
+        <button id="btn-ar-delete" class="ar-btn danger">
+          <span>🗑️</span> Remove Item
+        </button>
+        <button id="btn-ar-camera" class="ar-btn">
+          <span>📷</span> Toggle Live Camera
+        </button>
+      </div>
+
+      <!-- Video Feed for Real Passthrough Background -->
+      <video id="webcam-video" autoplay playsinline style="display: none;"></video>
+
+      <!-- Vision Camera Overlay -->
+      <div class="camera-vision-overlay">
+        <div class="vision-header">
+          <span id="vision-title">AR HORIZONTAL PLANE SCAN</span>
+          <span style="color: var(--neon-green);">TRACKING 60 FPS</span>
+        </div>
+        <canvas id="vision-canvas"></canvas>
+      </div>
+    </main>
+
+    <!-- Right Sidebar - Risk Alerts & Diagnostics -->
+    <aside class="sidebar-right">
+      <div class="section-title">🚨 SafeSight Spatial Safety & Clearance</div>
+      <div id="alerts-container">
+        <div style="font-size: 13px; color: var(--neon-green); padding: 12px; background: rgba(16,185,129,0.1); border: 1px solid var(--neon-green); border-radius: 8px;">
+          ✓ AR floor plane mapped. Placed furniture adheres to safety clearances.
+        </div>
+      </div>
+
+      <div class="section-title" style="margin-top: 15px;">📦 Placed Furniture Objects (<span id="placed-count">0</span>)</div>
+      <div id="entity-tracker" style="font-size: 12px; color: var(--text-muted); display: flex; flex-direction: column; gap: 6px;">
+        <div>No furniture placed yet. Click on the floor or tap 'Place Selected'.</div>
+      </div>
+
+      <div class="section-title" style="margin-top: 15px;">⚙️ Unity AR Foundation Bridge</div>
+      <pre><code id="code-preview">// SafeSightAR.AR.MobileARFurniturePlacement
+if (ARRaycastManager.Raycast(touchPos, hits, TrackableType.PlaneWithinPolygon)) {
+    Pose hitPose = hits[0].pose;
+    Instantiate(selectedFurniture.prefab, hitPose.position, hitPose.rotation);
+}</code></pre>
+    </aside>
+
+    <!-- Bottom Metrics Bar -->
+    <footer class="bottom-bar">
+      <div class="metric-box">
+        <div class="metric-label">Active Placed Items</div>
+        <div id="metric-items-count" class="metric-value">0 Units</div>
+      </div>
+      <div class="metric-box">
+        <div class="metric-label">Minimum Safe Passage</div>
+        <div id="metric-min-clearance" class="metric-value" style="color: var(--neon-green);">Clear</div>
+      </div>
+      <div class="metric-box">
+        <div class="metric-label">AR Tracking Mode</div>
+        <div class="metric-value" style="color: var(--neon-cyan);">Surface Plane (SLAM)</div>
+      </div>
+      <div class="metric-box">
+        <div class="metric-label">Hardware AR Engine</div>
+        <div class="metric-value" style="color: var(--neon-green);">ARCore / ARKit Ready</div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+</html>

@@ -1,0 +1,2 @@
+rootProject.name = "SafeSight_AR_Furniture"
+include ':app'
