@@ -1,4 +1,4 @@
-# 🛡️ SafeSight AR & SmartSpace AR System
+#  SafeSight AR & SmartSpace AR System
 > **A Context-Aware Augmented Reality System for Detecting Everyday Risks and Visualizing Spatial Environments**
 
 [![Unity Engine](https://img.shields.io/badge/Unity-6000.3.23f1-black.svg?logo=unity)](https://unity3d.com/)
@@ -9,7 +9,7 @@
 
 ---
 
-## 📌 Overview
+##  Overview
 
 **SafeSight AR** bridges the gap between passive object identification and proactive situational safety. Standard AR tools identify *what* an object is, but fail to evaluate *whether the situation is hazardous*. SafeSight AR analyzes spatial and relational dynamics between objects to detect everyday hazards (spills, edge drops, trip points) before human error leads to accidents.
 
@@ -17,13 +17,13 @@ Integrated into this repository is **SmartSpace AR**, an interior furniture layo
 
 ---
 
-## 🧠 Core System Capabilities
+## Core System Capabilities
 
 ### 1. Relational Risk Intelligence (SafeSight)
 Unlike traditional computer vision that flags individual objects in isolation, the Risk Engine evaluates pairwise spatial proximity:
-* **🔴 Spill Risk:** Liquid container placed within critical proximity ($\Delta d \le 0.35\text{ m}$) of electronic equipment (laptop, keyboard).
-* **⚠️ Fall / Cut Risk:** Sharp tools (knives) placed near perimeter edges ($\le 0.12\text{ m}$) of tables or desks.
-* **⚠️ Trip Hazard:** Protruding open drawers ($\gt 0.40\text{ m}$) or cables crossing floor walkway vectors.
+* ** Spill Risk:** Liquid container placed within critical proximity ($\Delta d \le 0.35\text{ m}$) of electronic equipment (laptop, keyboard).
+* ** Fall / Cut Risk:** Sharp tools (knives) placed near perimeter edges ($\le 0.12\text{ m}$) of tables or desks.
+* ** Trip Hazard:** Protruding open drawers ($\gt 0.40\text{ m}$) or cables crossing floor walkway vectors.
 
 ### 2. Dynamic Furniture & Replacement System (SmartSpace)
 * **Mobile AR Placement:** Real-world surface plane tracking and reticle-based tap-to-place workflows powered by AR Foundation.
@@ -37,7 +37,7 @@ Unlike traditional computer vision that flags individual objects in isolation, t
 
 ---
 
-## 🏗️ Architecture & Project Structure
+##  Architecture & Project Structure
 
 ```text
 Assets/
